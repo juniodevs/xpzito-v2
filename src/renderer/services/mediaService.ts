@@ -4,11 +4,11 @@ const isWeb = typeof window !== 'undefined' && !window.api;
 const SERVER_URL = 'http://localhost:4005';
 
 export const mediaService = {
-  audioLibrary: async () => {
+  audioLibrary: async (): Promise<AudioLibrary> => {
     if (isWeb) return fetch(`${SERVER_URL}/api/audioLibrary`).then(r => r.json());
     return window.api.invoke('media:audioLibrary');
   },
-  botLibrary: async () => {
+  botLibrary: async (): Promise<BotLibrary> => {
     if (isWeb) return fetch(`${SERVER_URL}/api/botLibrary`).then(r => r.json());
     return window.api.invoke('media:botLibrary');
   },

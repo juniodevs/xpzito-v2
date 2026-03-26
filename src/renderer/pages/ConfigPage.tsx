@@ -4,12 +4,11 @@ import { timerService } from '@/services/timerService';
 import { TimerForm } from '@/components/TimerForm';
 import { MediaLibraryManager } from '@/components/MediaLibraryManager';
 import { ClipboardCopy, Timer, Library, MonitorPlay } from 'lucide-react';
-import type { SpriteState, SpriteConfig } from '@/types/media';
 import { entranceAnimationOptions, exitAnimationOptions, type ViewerPreferences } from '@/types/viewer';
 import { loadViewerPreferences, saveViewerPreferences } from '@/lib/viewerPreferencesStorage';
 
 export const ConfigPage = () => {
-  const { state, isConnected } = useTimerChannel();
+  const { state } = useTimerChannel();
   const [activeTab, setActiveTab] = useState<'timer' | 'library'>('timer');
   const [copied, setCopied] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
@@ -29,7 +28,6 @@ export const ConfigPage = () => {
   };
 
   const isDev = import.meta.env.DEV;
-  // If in dev mode use the Vite dev server, else use the Express server on 4005. Both should point to the #/viewer route
   const viewerUrl = isDev ? 'http://localhost:5173/#/viewer' : 'http://localhost:4005/#/viewer';
 
   const handleStartTimer = async (seconds: number) => {

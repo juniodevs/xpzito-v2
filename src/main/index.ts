@@ -11,9 +11,8 @@ import { TimerStore } from './timerStore';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Keep reference to both windows
+// Keep reference to config window
 let configWindow: BrowserWindow | null = null;
-let viewerWindow: BrowserWindow | null = null;
 
 // Timer Store
 const timerStore = new TimerStore();
@@ -84,11 +83,11 @@ function startLocalServer() {
   const reactDistPath = path.join(__dirname, '../../dist-react');
   serverApp.use(express.static(reactDistPath));
 
-  serverApp.get('/api/audioLibrary', async (req, res) => {
+  serverApp.get('/api/audioLibrary', async (_req, res) => {
     res.json(await getAudioLibrary());
   });
 
-  serverApp.get('/api/botLibrary', async (req, res) => {
+  serverApp.get('/api/botLibrary', async (_req, res) => {
     res.json(await getBotLibrary());
   });
 
@@ -150,42 +149,9 @@ function createConfigWindow() {
   }
 }
 
-function createViewerWindow() {
-  if (viewerWindow && !viewerWindow.isDestroyed()) {
-    viewerWindow.focus();
-    return;
-  }
-
-  viewerWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-    hasShadow: false,
-    webPreferences: {
-      preload: PRELOAD,
-      contextIsolation: true,
-      nodeIntegration: false
-    }
-  });
-
-  if (process.env.VITE_DEV_SERVER_URL) {
-    viewerWindow.loadURL(process.env.VITE_DEV_SERVER_URL + '#/viewer');
-  } else {
-    viewerWindow.loadFile(INDEX_HTML, { hash: '/viewer' });
-  }
-  
-  // By default, make it click-through, uncomment if you want complete click-through
-  // viewerWindow.setIgnoreMouseEvents(true);
-}
-
 function broadcast(channel: string, ...args: any[]) {
   if (configWindow && !configWindow.isDestroyed()) {
     configWindow.webContents.send(channel, ...args);
-  }
-  if (viewerWindow && !viewerWindow.isDestroyed()) {
-    viewerWindow.webContents.send(channel, ...args);
   }
   
   if (wss) {

@@ -1,4 +1,3 @@
-import type { TimerState } from '@/types/timer';
 import type { ViewerPreferencesPayload } from '@/types/viewer';
 
 export const timerService = {
