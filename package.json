@@ -55,7 +55,7 @@
     "appId": "com.xpzito.desktop",
     "productName": "XPzito",
     "win": {
-      "target": "nsis"
+      "target": "zip"
     },
     "directories": {
       "output": "dist"

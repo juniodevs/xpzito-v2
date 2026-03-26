@@ -22,8 +22,17 @@ const DIST = path.join(__dirname, '../..');
 const DIST_REACT = path.join(DIST, 'dist-react');
 const PRELOAD = path.join(DIST, 'dist-electron', 'preload', 'index.mjs');
 const INDEX_HTML = path.join(DIST_REACT, 'index.html');
-const USER_DATA = app.getPath('userData');
-const MEDIA_DIR = path.join(USER_DATA, 'media');
+
+const isDev = !app.isPackaged;
+const APP_DIR = isDev 
+  ? process.cwd() 
+  : path.dirname(app.getPath('exe'));
+
+if (!isDev) {
+  app.setPath('userData', path.join(APP_DIR, 'userdata'));
+}
+
+const MEDIA_DIR = path.join(APP_DIR, 'media');
 
 let wss: WebSocketServer | null = null;
 const LOCAL_PORT = 4005;
