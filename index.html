@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/xpzitologo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XPzito</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      window.addEventListener('error', function(e) {
+        console.error('GLOBAL ERROR:', e.error);
+        fetch('http://localhost:5173/log?msg=' + encodeURIComponent(e.error.stack || e.error.message), {mode: 'no-cors'}).catch(()=>{});
+      });
+    </script>
+    <script type="module" src="/src/renderer/main.tsx"></script>
+  </body>
+</html>
