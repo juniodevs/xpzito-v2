@@ -41,6 +41,10 @@ Thumbs.db
 coverage/
 docs/
 
+# Local User Data and Media
+media/
+userdata/
+
 # Temporary / Debug Scripts generated locally
 *.patch
 patch*.mjs
