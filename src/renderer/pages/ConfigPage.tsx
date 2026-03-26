@@ -3,7 +3,7 @@ import { useTimerChannel } from '@/hooks/useTimerChannel';
 import { timerService } from '@/services/timerService';
 import { TimerForm } from '@/components/TimerForm';
 import { MediaLibraryManager } from '@/components/MediaLibraryManager';
-import { ClipboardCopy, Volume2, Timer, Library, MonitorPlay } from 'lucide-react';
+import { ClipboardCopy, Timer, Library, MonitorPlay } from 'lucide-react';
 import type { SpriteState, SpriteConfig } from '@/types/media';
 import { entranceAnimationOptions, exitAnimationOptions, type ViewerPreferences } from '@/types/viewer';
 import { loadViewerPreferences, saveViewerPreferences } from '@/lib/viewerPreferencesStorage';
@@ -12,7 +12,6 @@ export const ConfigPage = () => {
   const { state, isConnected } = useTimerChannel();
   const [activeTab, setActiveTab] = useState<'timer' | 'library'>('timer');
   const [copied, setCopied] = useState(false);
-  const [botVolume, setBotVolume] = useState(0.5);
   const [isBusy, setIsBusy] = useState(false);
 
   // Carrega as configurações salvas na máquina ao abrir o painel
@@ -148,47 +147,24 @@ export const ConfigPage = () => {
               <section className="bg-[#141419] border border-zinc-800/50 rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
-                    <Volume2 className="w-4 h-4 text-zinc-400" />
+                    <MonitorPlay className="w-4 h-4 text-zinc-400" />
                   </div>
-                  <h2 className="text-sm font-medium text-zinc-300">Configurações Gerais do Bot</h2>
-                </div>
-                
-                <div className="flex flex-col gap-3">
-                  <div className="flex justify-between items-center">
-                    <label className="text-sm text-zinc-400">Volume do Bot</label>
-                    <span className="text-xs font-mono text-zinc-500 text-right w-12">{Math.round(botVolume * 100)}%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={botVolume}
-                    onChange={(e) => setBotVolume(parseFloat(e.target.value))}
-                  />
+                  <h2 className="text-sm font-medium text-zinc-300">Animações da Tela</h2>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-zinc-800/50">
-                  <div className="flex items-center gap-2 mb-6">
-                    <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
-                      <MonitorPlay className="w-4 h-4 text-zinc-400" />
-                    </div>
-                    <h2 className="text-sm font-medium text-zinc-300">Animações da Tela</h2>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs text-zinc-400 font-medium">Animação de Entrada</label>
+                    <select
+                      value={state.viewer?.entranceAnimation || 'slide-up'}
+                      onChange={(e) => handleUpdatePrefs({ entranceAnimation: e.target.value as any })}
+                      className="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-zinc-200 focus:outline-none"
+                    >
+                      {entranceAnimationOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
                   </div>
-
-                  <div className="flex flex-col gap-4">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-zinc-400 font-medium">Animação de Entrada</label>
-                      <select
-                        value={state.viewer?.entranceAnimation || 'slide-up'}
-                        onChange={(e) => handleUpdatePrefs({ entranceAnimation: e.target.value as any })}
-                        className="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-zinc-200 focus:outline-none"
-                      >
-                        {entranceAnimationOptions.map((opt) => (
-                          <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                      </select>
-                    </div>
 
                     <div className="flex flex-col gap-2">
                       <label className="text-xs text-zinc-400 font-medium">Animação de Saída</label>
@@ -215,7 +191,6 @@ export const ConfigPage = () => {
                       />
                     </div>
                   </div>
-                </div>
               </section>
             </div>
           </div>
