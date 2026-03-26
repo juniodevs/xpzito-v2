@@ -135,6 +135,7 @@ function createConfigWindow() {
     width: 1000,
     height: 800,
     title: 'XPzito - Control Panel',
+    autoHideMenuBar: true,
     webPreferences: {
       preload: PRELOAD,
       contextIsolation: true,
