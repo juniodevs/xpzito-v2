@@ -1,5 +1,8 @@
 {
-  "name": "web",
+  "name": "xpzito-v2",
+  "author": "juniodevs",
+  "repository": "https://github.com/juniodevs/xpzito-v2",
+  "homepage": "https://github.com/juniodevs",
   "private": true,
   "version": "0.1.0",
   "type": "module",

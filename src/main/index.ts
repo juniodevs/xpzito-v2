@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import path from 'path';
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
@@ -138,6 +138,20 @@ function createConfigWindow() {
       preload: PRELOAD,
       contextIsolation: true,
       nodeIntegration: false
+    }
+  });
+
+  configWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url);
+    return { action: 'deny' };
+  });
+
+  configWindow.webContents.on('will-navigate', (event, url) => {
+    if (url.startsWith('http:') || url.startsWith('https:')) {
+      if (!url.includes('localhost') && !url.includes('127.0.0.1')) {
+        event.preventDefault();
+        shell.openExternal(url);
+      }
     }
   });
 
