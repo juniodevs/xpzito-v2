@@ -40,9 +40,7 @@ const isContextUnlocked = () => {
 
 export const audioController: AudioHandle = {
   play: async (src: string) => {
-    await ensureContextActive();
-
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>(async (resolve, reject) => {
       disposeCurrent();
       currentHowl = new Howl({
         src: [src],
@@ -61,7 +59,13 @@ export const audioController: AudioHandle = {
           reject(error ?? new Error('Falha ao reproduzir áudio.'));
         }
       });
-      currentHowl.play();
+
+      try {
+        await ensureContextActive();
+        currentHowl.play();
+      } catch (err) {
+        reject(err);
+      }
     });
   },
   stop: () => disposeCurrent(),
@@ -71,7 +75,7 @@ export const audioController: AudioHandle = {
   isUnlocked: () => isContextUnlocked(),
   getVolumeLevel: () => {
     if (!analyser || !dataArray) return 0;
-    analyser.getByteFrequencyData(dataArray);
+    analyser.getByteFrequencyData(dataArray as unknown as Uint8Array);
     let sum = 0;
     for (let i = 0; i < dataArray.length; i++) {
       sum += dataArray[i];

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { mediaService } from '@/services/mediaService';
-import { audioController } from '@/lib/audioController';
-import { useTimerChannel } from '@/hooks/useTimerChannel';
-import type { AudioLibrary, BotSprite } from '@/types/media';
-import { type ViewerEntranceAnimation, type ViewerExitAnimation } from '@/types/viewer';
-import { loadViewerPreferences, resolveViewerPreferences } from '@/lib/viewerPreferencesStorage';
+import { mediaService } from '../services/mediaService';
+import { audioController } from '../lib/audioController';
+import { useTimerChannel } from '../hooks/useTimerChannel';
+import type { AudioLibrary, BotSprite } from '../types/media';
+import { type ViewerEntranceAnimation, type ViewerExitAnimation } from '../types/viewer';
+import { loadViewerPreferences, resolveViewerPreferences } from '../lib/viewerPreferencesStorage';
 
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
