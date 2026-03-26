@@ -4,6 +4,5 @@
 
 .viewer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .bot-stage { display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; }
-/* Limita o bot a 75% da altura da tela para sobrar espaço (25%) para animações de pulo/rotate sem cortar. */
 .bot-stage img { max-width: 90%; max-height: 75vh; object-fit: contain; }
 .viewer-loader, .viewer-error { color: white; font-family: sans-serif; font-size: 2rem; font-weight: bold; text-shadow: 0px 4px 10px rgba(0,0,0,0.5); }

@@ -10,7 +10,6 @@ export const useTimerChannel = () => {
     const handleState = (payload: TimerState) => setState(payload);
 
     if (typeof window !== 'undefined' && !window.api) {
-      // Fallback para navegador web (OBS)
       const ws = new WebSocket('ws://localhost:4005');
       ws.onopen = () => setIsConnected(true);
       ws.onclose = () => setIsConnected(false);
@@ -29,10 +28,8 @@ export const useTimerChannel = () => {
       return () => ws.close();
     }
 
-    // Modo nativo Electron APP
     const unsubscribe = window.api.on('timer:update', handleState);
 
-    // Initial state fetch
     window.api.invoke('timer:status').then(handleState);
 
     return () => {

@@ -13,7 +13,6 @@ export const ConfigPage = () => {
   const [copied, setCopied] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
 
-  // Carrega as configurações salvas na máquina ao abrir o painel
   useEffect(() => {
     const saved = loadViewerPreferences();
     if (saved) {

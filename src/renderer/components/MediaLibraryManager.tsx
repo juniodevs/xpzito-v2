@@ -18,7 +18,6 @@ export const MediaLibraryManager = () => {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: 'error' | 'success' } | null>(null);
 
-  // Estados EXLÍCITOS de arquivos controlados puramente pelo React (Sem ref, sem forms, sem overlays)
   const [spriteVariant, setSpriteVariant] = useState('idle');
   const [spriteFile, setSpriteFile] = useState<File | null>(null);
   const [transitionIn, setTransitionIn] = useState<File | null>(null);
@@ -48,7 +47,7 @@ export const MediaLibraryManager = () => {
     try {
       const res = await mediaService.uploadSprite(spriteVariant, spriteFile);
       setBotLib(res);
-      setSpriteFile(null); // Limpa o estado
+      setSpriteFile(null);
       showMsg('Sprite atualizada com sucesso!', 'success');
     } catch (e: any) {
       showMsg(e.message || 'Erro ao enviar sprite', 'error');
@@ -86,7 +85,7 @@ export const MediaLibraryManager = () => {
     try {
       const res = await mediaService.uploadRandomAudios(randomFiles);
       setAudioLib(res);
-      setRandomFiles([]); // Limpa após o envio
+      setRandomFiles([]);
       showMsg(`${randomFiles.length} áudio(s) adicionado(s)!`, 'success');
     } catch (e: any) {
       showMsg(e.message || 'Erro ao enviar áudios', 'error');
@@ -121,7 +120,7 @@ export const MediaLibraryManager = () => {
         </div>
       )}
 
-      {/* 1. SPRITES DO BOT */}
+      {}
       <section className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-zinc-200">1. Sprites do Bot (Imagens)</h2>
         
@@ -166,9 +165,6 @@ export const MediaLibraryManager = () => {
 
         <div className="grid grid-cols-2 gap-4 mt-2">
           {['idle', 'talking'].map((variant) => {
-             // O backend retorna BotLibrary como { sprites: [ { name: 'idle', url: '...' }, { name: 'talking', url: '...' } ] }
-             // Mas a UI antiga tentava acessar direto como botLib.sprites.idle (formato de objeto).
-             // Adicionei essa busca pelo Array para garantir que acha a URL correta no padrão novo
              const spriteData = botLib?.sprites?.find(s => s.name === variant);
              const url = spriteData?.url || '';
              

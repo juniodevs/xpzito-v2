@@ -17,7 +17,6 @@ const disposeCurrent = () => {
   }
 };
 
-// Chrome/Safari suspend the shared Web Audio context until a gesture happens.
 const ensureContextActive = async () => {
   const ctx = Howler.ctx;
   if (ctx && ctx.state === 'suspended') {

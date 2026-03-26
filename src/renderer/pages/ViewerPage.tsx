@@ -233,7 +233,7 @@ export const ViewerPage = () => {
 
     const unsub = window.api.on('timer:preview', handler); 
     return () => { unsub(); };
-  }, []); // Remove dependency on runSequence to keep WS/IPC stable
+  }, []);
 
   const hasAcked = useRef(false);
 
@@ -248,14 +248,8 @@ export const ViewerPage = () => {
   }, [state.status, runSequence]);
 
   useEffect(() => {
-    // Try to unlock audio context automatically on mount. Browsers may still
-    // block this if no user gesture is available; playback will fall back to
-    // HTML5 where necessary.
     audioController.unlock().catch(() => {
-      // Silent failure — we purposely do not show any UI.
     });
-    
-    // Esconder o bot inicialmente
     if (botRef.current) {
       gsap.set(botRef.current, { display: 'none', opacity: 0 });
     }
@@ -263,7 +257,7 @@ export const ViewerPage = () => {
 
   return (
     <div className="viewer-overlay">
-      {/* No audio gate or prompts — attempt automatic unlock only. */}
+      {}
       <div className="bot-stage bot-stage--floating" ref={botRef} style={{ display: 'none', opacity: 0 }}>
         {currentSprite ? (
           <img src={currentSprite.url} alt="Bot" className={mouthOpen ? 'bot-mouth-open' : 'bot-mouth-closed'} />

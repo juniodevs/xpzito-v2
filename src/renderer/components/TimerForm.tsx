@@ -41,7 +41,6 @@ export const TimerForm = ({ state, onStart, onCancel, isBusy = false, onTest, ca
       setIsTesting(true);
       onTest();
       
-      // Cooldown visual no botão durante o preview (6 segundos)
       setTimeout(() => {
         setIsTesting(false);
       }, 6000);

@@ -11,13 +11,13 @@ import { TimerStore } from './timerStore';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Keep reference to config window
+
 let configWindow: BrowserWindow | null = null;
 
-// Timer Store
+
 const timerStore = new TimerStore();
 
-// Paths
+
 const DIST = path.join(__dirname, '../..');
 const DIST_REACT = path.join(DIST, 'dist-react');
 const PRELOAD = path.join(DIST, 'dist-electron', 'preload', 'index.mjs');
@@ -35,7 +35,7 @@ async function createMediaDirs() {
   }
 }
 
-// Media IPC Lookups
+
 const safeURL = (p: string) => {
   const rel = path.relative(MEDIA_DIR, p).replace(/\\/g, '/');
   return `http://localhost:${LOCAL_PORT}/media/${rel}`;
@@ -79,7 +79,6 @@ function startLocalServer() {
 
   serverApp.use('/media', express.static(MEDIA_DIR));
   
-  // Serve React built files on the same port
   const reactDistPath = path.join(__dirname, '../../dist-react');
   serverApp.use(express.static(reactDistPath));
 
@@ -157,7 +156,7 @@ function broadcast(channel: string, ...args: any[]) {
   if (wss) {
     const msg = JSON.stringify({ channel, args });
     wss.clients.forEach((client) => {
-      if (client.readyState === 1) { // 1 = OPEN
+      if (client.readyState === 1) {
         client.send(msg);
       }
     });
@@ -165,7 +164,6 @@ function broadcast(channel: string, ...args: any[]) {
 }
 
 function setupIpcHandlers() {
-  // Timer IPC
   ipcMain.on('timer:test', () => {
     console.log('[Main] Test event triggered! Broadcasting preview...');
     broadcast('timer:preview', null);
