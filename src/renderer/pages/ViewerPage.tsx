@@ -20,7 +20,7 @@ export const ViewerPage = () => {
   const botRef = useRef<HTMLDivElement | null>(null);
   const playbackLock = useRef(false);
   
-  const mouthIntervalRef = useRef<ReturnType<typeof window.setInterval> | null>(null);
+  const mouthIntervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -55,7 +55,7 @@ export const ViewerPage = () => {
 
   const stopMouthAnimation = () => {
     if (mouthIntervalRef.current) {
-      window.clearInterval(mouthIntervalRef.current);
+      window.cancelAnimationFrame(mouthIntervalRef.current);
       mouthIntervalRef.current = null;
     }
     setMouthOpen(false);
@@ -162,9 +162,22 @@ export const ViewerPage = () => {
       return wait(1500);
     }
     const pick = audioLibrary.random[Math.floor(Math.random() * audioLibrary.random.length)];
-    mouthIntervalRef.current = window.setInterval(() => {
-      setMouthOpen((value) => !value);
-    }, 180);
+    let lastToggleTime = 0;
+    
+    const checkAudioVolume = (timestamp: number) => {
+      const volume = audioController.getVolumeLevel();
+      if (volume > 5) {
+        if (timestamp - lastToggleTime > 150) {
+          setMouthOpen((prev) => !prev);
+          lastToggleTime = timestamp;
+        }
+      } else {
+        setMouthOpen(false);
+      }
+      mouthIntervalRef.current = window.requestAnimationFrame(checkAudioVolume);
+    };
+    
+    mouthIntervalRef.current = window.requestAnimationFrame(checkAudioVolume);
     await audioController.play(pick);
     stopMouthAnimation();
   }, [audioLibrary]);
