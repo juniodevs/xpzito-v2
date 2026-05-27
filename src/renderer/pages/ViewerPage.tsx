@@ -163,10 +163,11 @@ export const ViewerPage = () => {
     }
     const pick = audioLibrary.random[Math.floor(Math.random() * audioLibrary.random.length)];
     let lastToggleTime = 0;
-    
+    const threshold = viewer.mouthThreshold;
+
     const checkAudioVolume = (timestamp: number) => {
       const volume = audioController.getVolumeLevel();
-      if (volume > 5) {
+      if (volume > threshold) {
         if (timestamp - lastToggleTime > 150) {
           setMouthOpen((prev) => !prev);
           lastToggleTime = timestamp;
@@ -176,11 +177,11 @@ export const ViewerPage = () => {
       }
       mouthIntervalRef.current = window.requestAnimationFrame(checkAudioVolume);
     };
-    
+
     mouthIntervalRef.current = window.requestAnimationFrame(checkAudioVolume);
     await audioController.play(pick);
     stopMouthAnimation();
-  }, [audioLibrary]);
+  }, [audioLibrary, viewer.mouthThreshold]);
 
   const viewer = useMemo(
     () => resolveViewerPreferences(state.viewer, typeof window === 'undefined' ? null : loadViewerPreferences()),

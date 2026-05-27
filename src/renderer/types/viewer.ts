@@ -16,6 +16,8 @@ export interface ViewerPreferences {
   entranceAnimation: ViewerEntranceAnimation;
   exitAnimation: ViewerExitAnimation;
   exitDelayMs: number;
+  /** Volume threshold (0–128) above which the bot's mouth opens. Default: 5 */
+  mouthThreshold: number;
 }
 
 export type ViewerPreferencesPayload = Partial<ViewerPreferences>;
@@ -23,5 +25,6 @@ export type ViewerPreferencesPayload = Partial<ViewerPreferences>;
 export const defaultViewerPreferences: ViewerPreferences = {
   entranceAnimation: 'slide-up',
   exitAnimation: 'spin-fall',
-  exitDelayMs: 0
+  exitDelayMs: 0,
+  mouthThreshold: 5
 };

@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/xpzitologo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Content-Security-Policy:
+      - default-src 'self'          → only allow resources from the same origin
+      - script-src 'self'           → no inline scripts or external JS
+      - style-src 'self' 'unsafe-inline' → Tailwind injects inline styles
+      - img-src 'self' data: blob: http://localhost:4005 → sprites served locally
+      - media-src 'self' blob: http://localhost:4005     → audio files served locally
+      - connect-src 'self' ws://localhost:4005 http://localhost:4005 http://localhost:5173 → API + WebSocket
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src 'self';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data: blob: http://localhost:4005;
+        media-src 'self' blob: http://localhost:4005;
+        connect-src 'self' ws://localhost:4005 http://localhost:4005 http://localhost:5173 http://localhost:5174;
+      "
+    />
     <title>XPzito</title>
   </head>
   <body>

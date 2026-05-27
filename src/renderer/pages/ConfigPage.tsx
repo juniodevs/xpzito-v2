@@ -207,6 +207,27 @@ export const ConfigPage = () => {
                         className="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-zinc-200 focus:outline-none"
                       />
                     </div>
+
+                    <div className="flex flex-col gap-2">
+                      <div className="flex justify-between items-center">
+                        <label className="text-xs text-zinc-400 font-medium">Sensibilidade da Boca (Threshold)</label>
+                        <span className="text-xs font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">
+                          {state.viewer?.mouthThreshold ?? 5}
+                        </span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="60"
+                        step="1"
+                        value={state.viewer?.mouthThreshold ?? 5}
+                        onChange={(e) => handleUpdatePrefs({ mouthThreshold: parseInt(e.target.value, 10) })}
+                        className="w-full accent-indigo-500"
+                      />
+                      <p className="text-[10px] text-zinc-500">
+                        Valor baixo = boca abre com qualquer som. Valor alto = só abre com áudios mais altos.
+                      </p>
+                    </div>
                   </div>
               </section>
 

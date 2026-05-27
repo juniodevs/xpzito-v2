@@ -12,12 +12,15 @@ export interface ViewerPreferences {
   entranceAnimation: ViewerEntranceAnimation;
   exitAnimation: ViewerExitAnimation;
   exitDelayMs: number;
+  /** Volume threshold (0–128) above which the bot's mouth opens. Default: 5 */
+  mouthThreshold: number;
 }
 
 export const defaultViewerPreferences: ViewerPreferences = {
   entranceAnimation: 'slide-up',
   exitAnimation: 'slide-down',
-  exitDelayMs: 4000
+  exitDelayMs: 4000,
+  mouthThreshold: 5
 };
 
 export interface TimerState {

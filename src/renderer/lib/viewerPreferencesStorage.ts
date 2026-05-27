@@ -8,7 +8,14 @@ const normalizePreferences = (prefs?: Partial<ViewerPreferences>): ViewerPrefere
   exitDelayMs:
     typeof prefs?.exitDelayMs === 'number' && Number.isFinite(prefs.exitDelayMs) && prefs.exitDelayMs >= 0
       ? prefs.exitDelayMs
-      : defaultViewerPreferences.exitDelayMs
+      : defaultViewerPreferences.exitDelayMs,
+  mouthThreshold:
+    typeof prefs?.mouthThreshold === 'number' &&
+    Number.isFinite(prefs.mouthThreshold) &&
+    prefs.mouthThreshold >= 0 &&
+    prefs.mouthThreshold <= 128
+      ? prefs.mouthThreshold
+      : defaultViewerPreferences.mouthThreshold
 });
 
 export const loadViewerPreferences = (): ViewerPreferences | null => {
