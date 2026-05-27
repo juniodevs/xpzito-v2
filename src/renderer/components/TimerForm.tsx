@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import type { TimerState } from '@/types/timer';
 import { useTimerForm } from '@/hooks/useTimerForm';
-import { Play, Square, Timer, Activity } from 'lucide-react';
+import { Play, Square, Timer, Activity, Pause } from 'lucide-react';
 
 interface Props {
   state: TimerState;
   onStart: (seconds: number) => Promise<void>;
   onCancel: () => Promise<void>;
+  onPause?: () => Promise<void>;
+  onResume?: () => Promise<void>;
   isBusy?: boolean;
   onTest?: () => void;
   canTest?: boolean;
@@ -19,7 +21,7 @@ const quickPresets = [
   { label: '20m', value: 20 * 60 }
 ];
 
-export const TimerForm = ({ state, onStart, onCancel, isBusy = false, onTest, canTest = true }: Props) => {
+export const TimerForm = ({ state, onStart, onCancel, onPause, onResume, isBusy = false, onTest, canTest = true }: Props) => {
   const {
     seconds,
     setSeconds,
@@ -98,6 +100,30 @@ export const TimerForm = ({ state, onStart, onCancel, isBusy = false, onTest, ca
         >
           {startLabel}
         </button>
+
+        {/* Pause / Resume */}
+        {(onPause || onResume) && (
+          state.status === 'running' ? (
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => onPause?.()}
+              className="flex items-center justify-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-400 rounded-lg px-4 py-3 font-medium transition-all active:scale-[0.98] disabled:opacity-50"
+            >
+              <Pause className="w-4 h-4" /> Pausar
+            </button>
+          ) : state.status === 'paused' ? (
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => onResume?.()}
+              className="flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 rounded-lg px-4 py-3 font-medium transition-all active:scale-[0.98] disabled:opacity-50"
+            >
+              <Play className="w-4 h-4" /> Retomar
+            </button>
+          ) : null
+        )}
+
         <button
           type="button"
           disabled={disabled || !isRunning}

@@ -202,6 +202,16 @@ function setupIpcHandlers() {
       return timerStore.getState();
     });
 
+    ipcMain.handle('timer:pause', () => {
+      timerStore.pause();
+      return timerStore.getState();
+    });
+
+    ipcMain.handle('timer:resume', () => {
+      timerStore.resume();
+      return timerStore.getState();
+    });
+
     ipcMain.handle('timer:ack-trigger', () => {
       timerStore.acknowledgeTrigger();
       return timerStore.getState();

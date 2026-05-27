@@ -3,6 +3,8 @@ import type { ViewerPreferencesPayload } from '@/types/viewer';
 export const timerService = {
   start: (durationSeconds: number) => window.api.invoke('timer:start', { durationSeconds }),
   cancel: () => window.api.invoke('timer:cancel'),
+  pause: () => window.api.invoke('timer:pause'),
+  resume: () => window.api.invoke('timer:resume'),
   acknowledge: () => window.api.invoke('timer:ack-trigger'),
   current: () => window.api.invoke('timer:status'),
   updateViewerPreferences: (preferences: ViewerPreferencesPayload) =>

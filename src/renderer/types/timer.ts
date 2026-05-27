@@ -1,7 +1,7 @@
 import type { ViewerPreferences } from './viewer';
 import { defaultViewerPreferences } from './viewer';
 
-export type TimerStatus = 'idle' | 'running' | 'triggered';
+export type TimerStatus = 'idle' | 'running' | 'paused' | 'triggered';
 
 export interface TimerState {
   durationSeconds: number;

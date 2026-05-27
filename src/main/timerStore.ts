@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
 
-export type TimerStatus = 'idle' | 'running' | 'triggered';
+export type TimerStatus = 'idle' | 'running' | 'paused' | 'triggered';
 
 export const entranceAnimations = ['slide-up', 'pop-bounce'] as const;
 export type ViewerEntranceAnimation = (typeof entranceAnimations)[number];
@@ -41,6 +41,7 @@ export class TimerStore extends EventEmitter {
 
   private ticker?: NodeJS.Timeout;
   private targetTimestamp: number | null = null;
+  private pausedRemainingMs: number | null = null;
 
   start(durationSeconds: number) {
     const clamped = Math.max(1, Math.floor(durationSeconds));
@@ -63,6 +64,7 @@ export class TimerStore extends EventEmitter {
   cancel() {
     this.clearTicker();
     this.targetTimestamp = null;
+    this.pausedRemainingMs = null;
     this.state = {
       durationSeconds: 0,
       remainingSeconds: 0,
@@ -71,6 +73,35 @@ export class TimerStore extends EventEmitter {
       viewer: { ...(this.state.viewer ?? defaultViewerPreferences) }
     };
     this.emitUpdate();
+  }
+
+  pause() {
+    if (this.state.status !== 'running' || !this.targetTimestamp) return;
+    this.clearTicker();
+    const now = Date.now();
+    this.pausedRemainingMs = Math.max(0, this.targetTimestamp - now);
+    this.targetTimestamp = null;
+    this.state = {
+      ...this.state,
+      status: 'paused',
+      updatedAt: now
+    };
+    this.emitUpdate();
+  }
+
+  resume() {
+    if (this.state.status !== 'paused' || this.pausedRemainingMs === null) return;
+    const now = Date.now();
+    this.targetTimestamp = now + this.pausedRemainingMs;
+    this.pausedRemainingMs = null;
+    this.state = {
+      ...this.state,
+      status: 'running',
+      endsAt: this.targetTimestamp,
+      updatedAt: now
+    };
+    this.emitUpdate();
+    this.ticker = setInterval(() => this.handleTick(), 250);
   }
 
   acknowledgeTrigger() {

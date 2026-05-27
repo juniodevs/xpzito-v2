@@ -40,6 +40,9 @@ export const useTimerForm = ({ state, onStart, onCancel }: UseTimerFormProps) =>
     if (state.status === 'running') {
       return 'Atualizar tempo';
     }
+    if (state.status === 'paused') {
+      return 'Atualizar tempo';
+    }
     if (state.status === 'triggered') {
       return 'Rearmar';
     }
@@ -50,6 +53,8 @@ export const useTimerForm = ({ state, onStart, onCancel }: UseTimerFormProps) =>
     switch (state.status) {
       case 'running':
         return `Bot toca em ${formatDuration(state.remainingSeconds)}`;
+      case 'paused':
+        return `⏸ Pausado — ${formatDuration(state.remainingSeconds)} restantes`;
       case 'triggered':
         return 'Bot pronto para tocar (aguardando visualização).';
       default:

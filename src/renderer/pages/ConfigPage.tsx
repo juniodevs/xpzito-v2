@@ -47,6 +47,24 @@ export const ConfigPage = () => {
     }
   };
 
+  const handlePauseTimer = async () => {
+    setIsBusy(true);
+    try {
+      await timerService.pause();
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const handleResumeTimer = async () => {
+    setIsBusy(true);
+    try {
+      await timerService.resume();
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(viewerUrl);
     setCopied(true);
@@ -98,7 +116,9 @@ export const ConfigPage = () => {
               <TimerForm 
                 state={state} 
                 onStart={handleStartTimer} 
-                onCancel={handleCancelTimer} 
+                onCancel={handleCancelTimer}
+                onPause={handlePauseTimer}
+                onResume={handleResumeTimer}
                 isBusy={isBusy}
                 onTest={handleTestBot}
                 canTest={state.status === 'idle'}
