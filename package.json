@@ -4,7 +4,7 @@
   "repository": "https://github.com/juniodevs/xpzito-v2",
   "homepage": "https://github.com/juniodevs",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
