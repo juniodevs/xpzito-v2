@@ -99,6 +99,8 @@ export const ConfigPage = () => {
                 state={state} 
                 onStart={handleStartTimer} 
                 onCancel={handleCancelTimer} 
+                onPause={async () => { await timerService.pause(); }}
+                onResume={async () => { await timerService.resume(); }}
                 isBusy={isBusy}
                 onTest={handleTestBot}
                 canTest={state.status === 'idle'}

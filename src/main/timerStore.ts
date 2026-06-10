@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
 
-export type TimerStatus = 'idle' | 'running' | 'triggered';
+export type TimerStatus = 'idle' | 'running' | 'paused' | 'triggered';
 
 export const entranceAnimations = ['slide-up', 'pop-bounce'] as const;
 export type ViewerEntranceAnimation = (typeof entranceAnimations)[number];
@@ -55,6 +55,32 @@ export class TimerStore extends EventEmitter {
       endsAt: this.targetTimestamp,
       updatedAt: now,
       viewer: { ...(this.state.viewer ?? defaultViewerPreferences) }
+    };
+    this.emitUpdate();
+    this.ticker = setInterval(() => this.handleTick(), 250);
+  }
+
+  pause() {
+    if (this.state.status !== 'running') return;
+    this.clearTicker();
+    this.targetTimestamp = null;
+    this.state = {
+      ...this.state,
+      status: 'paused',
+      updatedAt: Date.now()
+    };
+    this.emitUpdate();
+  }
+
+  resume() {
+    if (this.state.status !== 'paused') return;
+    const now = Date.now();
+    this.targetTimestamp = now + this.state.remainingSeconds * 1000;
+    this.state = {
+      ...this.state,
+      status: 'running',
+      endsAt: this.targetTimestamp,
+      updatedAt: now
     };
     this.emitUpdate();
     this.ticker = setInterval(() => this.handleTick(), 250);

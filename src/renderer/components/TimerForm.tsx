@@ -7,6 +7,8 @@ interface Props {
   state: TimerState;
   onStart: (seconds: number) => Promise<void>;
   onCancel: () => Promise<void>;
+  onPause?: () => Promise<void>;
+  onResume?: () => Promise<void>;
   isBusy?: boolean;
   onTest?: () => void;
   canTest?: boolean;
@@ -19,16 +21,18 @@ const quickPresets = [
   { label: '20m', value: 20 * 60 }
 ];
 
-export const TimerForm = ({ state, onStart, onCancel, isBusy = false, onTest, canTest = true }: Props) => {
+export const TimerForm = ({ state, onStart, onCancel, onPause, onResume, isBusy = false, onTest, canTest = true }: Props) => {
   const {
     seconds,
     setSeconds,
     message,
     handleSubmit,
     handleCancel,
+    handlePause,
+    handleResume,
     startLabel,
     stateLabel
-  } = useTimerForm({ state, onStart, onCancel });
+  } = useTimerForm({ state, onStart, onCancel, onPause, onResume });
 
   const [isTesting, setIsTesting] = useState(false);
 
@@ -98,14 +102,37 @@ export const TimerForm = ({ state, onStart, onCancel, isBusy = false, onTest, ca
         >
           {startLabel}
         </button>
-        <button
-          type="button"
-          disabled={disabled || !isRunning}
-          onClick={handleCancel}
-          className="flex items-center justify-center gap-2 bg-zinc-900/50 hover:bg-zinc-800 border-zinc-800 border text-zinc-300 rounded-lg px-4 py-3 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Square className="w-4 h-4" /> Cancelar
-        </button>
+        <div className="grid grid-cols-2 gap-2">
+          {state.status === 'running' && (
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={handlePause}
+              className="flex items-center justify-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/20 border text-amber-400 rounded-lg px-4 py-3 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Pausar
+            </button>
+          )}
+          {state.status === 'paused' && (
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={handleResume}
+              className="flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/20 border text-emerald-400 rounded-lg px-4 py-3 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Continuar
+            </button>
+          )}
+          <button
+            type="button"
+            disabled={disabled || !isRunning}
+            onClick={handleCancel}
+            className="flex items-center justify-center gap-2 bg-zinc-900/50 hover:bg-zinc-800 border-zinc-800 border text-zinc-300 rounded-lg px-4 py-3 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ gridColumn: (state.status === 'running' || state.status === 'paused') ? 'auto' : 'span 2' }}
+          >
+            <Square className="w-4 h-4" /> Cancelar
+          </button>
+        </div>
         
         {onTest && (
           <div className="mt-2 text-center flex flex-col gap-2">
